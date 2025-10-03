@@ -1,0 +1,1449 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ISTQB - Técnicas de Diseño y Gestión de Pruebas</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --primary: #2563eb;
+            --secondary: #7c3aed;
+            --accent: #06b6d4;
+            --dark: #1e293b;
+            --light: #f8fafc;
+            --success: #10b981;
+            --warning: #f59e0b;
+            --danger: #ef4444;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: var(--dark);
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            overflow-x: hidden;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        /* Header */
+        header {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            animation: slideDown 0.5s ease;
+        }
+
+        @keyframes slideDown {
+            from {
+                transform: translateY(-100%);
+            }
+            to {
+                transform: translateY(0);
+            }
+        }
+
+        nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1rem 0;
+        }
+
+        .logo {
+            font-size: 1.5rem;
+            font-weight: bold;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 2rem;
+            list-style: none;
+        }
+
+        .nav-links a {
+            text-decoration: none;
+            color: var(--dark);
+            font-weight: 500;
+            transition: color 0.3s;
+            position: relative;
+        }
+
+        .nav-links a::after {
+            content: '';
+            position: absolute;
+            bottom: -5px;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background: var(--primary);
+            transition: width 0.3s;
+        }
+
+        .nav-links a:hover::after {
+            width: 100%;
+        }
+
+        /* Hero Section */
+        .hero {
+            text-align: center;
+            padding: 4rem 0;
+            color: white;
+            animation: fadeIn 1s ease;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .hero h1 {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+        }
+
+        .hero p {
+            font-size: 1.2rem;
+            opacity: 0.9;
+        }
+
+        .badge {
+            display: inline-block;
+            background: rgba(255, 255, 255, 0.2);
+            padding: 0.5rem 1rem;
+            border-radius: 20px;
+            margin-top: 1rem;
+            backdrop-filter: blur(10px);
+        }
+
+        /* Main Content */
+        main {
+            background: white;
+            border-radius: 20px 20px 0 0;
+            margin-top: 2rem;
+            box-shadow: 0 -10px 30px rgba(0, 0, 0, 0.2);
+        }
+
+        section {
+            padding: 3rem 0;
+            animation: fadeInUp 0.6s ease;
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        section h2 {
+            font-size: 2rem;
+            color: var(--primary);
+            margin-bottom: 1.5rem;
+            position: relative;
+            padding-bottom: 0.5rem;
+        }
+
+        section h2::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 60px;
+            height: 3px;
+            background: linear-gradient(90deg, var(--primary), var(--accent));
+        }
+
+        section h3 {
+            color: var(--secondary);
+            margin: 1.5rem 0 1rem;
+            font-size: 1.5rem;
+        }
+
+        /* Cards */
+        .card-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+            margin: 2rem 0;
+        }
+
+        .card {
+            background: white;
+            border-radius: 15px;
+            padding: 2rem;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s, box-shadow 0.3s;
+            border: 2px solid transparent;
+        }
+
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.15);
+            border-color: var(--primary);
+        }
+
+        .card-icon {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+        }
+
+        .card h3 {
+            color: var(--primary);
+            margin: 0 0 1rem 0;
+        }
+
+        /* Accordion */
+        .accordion {
+            margin: 2rem 0;
+        }
+
+        .accordion-item {
+            background: var(--light);
+            border-radius: 10px;
+            margin-bottom: 1rem;
+            overflow: hidden;
+            transition: all 0.3s;
+        }
+
+        .accordion-header {
+            padding: 1.5rem;
+            cursor: pointer;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            color: white;
+            font-weight: 600;
+            transition: background 0.3s;
+        }
+
+        .accordion-header:hover {
+            opacity: 0.9;
+        }
+
+        .accordion-icon {
+            transition: transform 0.3s;
+        }
+
+        .accordion-item.active .accordion-icon {
+            transform: rotate(180deg);
+        }
+
+        .accordion-content {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.3s ease;
+            background: white;
+        }
+
+        .accordion-content-inner {
+            padding: 2rem;
+        }
+
+        /* Code Block */
+        .code-block {
+            background: #282c34;
+            color: #abb2bf;
+            padding: 1.5rem;
+            border-radius: 10px;
+            overflow-x: auto;
+            margin: 1rem 0;
+            font-family: 'Courier New', monospace;
+            position: relative;
+        }
+
+        .code-block::before {
+            content: 'Código';
+            position: absolute;
+            top: 0;
+            right: 0;
+            background: var(--primary);
+            color: white;
+            padding: 0.25rem 0.75rem;
+            font-size: 0.8rem;
+            border-radius: 0 10px 0 10px;
+        }
+
+        /* Example Box */
+        .example-box {
+            background: linear-gradient(135deg, #e0f2fe, #dbeafe);
+            border-left: 4px solid var(--primary);
+            padding: 1.5rem;
+            border-radius: 10px;
+            margin: 1rem 0;
+        }
+
+        .example-box h4 {
+            color: var(--primary);
+            margin-bottom: 0.5rem;
+        }
+
+        /* Table */
+        .table-container {
+            overflow-x: auto;
+            margin: 2rem 0;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            background: white;
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        th {
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            color: white;
+            padding: 1rem;
+            text-align: left;
+            font-weight: 600;
+        }
+
+        td {
+            padding: 1rem;
+            border-bottom: 1px solid #e2e8f0;
+        }
+
+        tr:hover {
+            background: var(--light);
+        }
+
+        /* Highlight Box */
+        .highlight {
+            background: linear-gradient(135deg, #fef3c7, #fde68a);
+            border-left: 4px solid var(--warning);
+            padding: 1rem;
+            border-radius: 10px;
+            margin: 1rem 0;
+        }
+
+        .success-box {
+            background: linear-gradient(135deg, #d1fae5, #a7f3d0);
+            border-left: 4px solid var(--success);
+            padding: 1rem;
+            border-radius: 10px;
+            margin: 1rem 0;
+        }
+
+        /* Interactive Quiz */
+        .quiz {
+            background: var(--light);
+            padding: 2rem;
+            border-radius: 15px;
+            margin: 2rem 0;
+        }
+
+        .quiz-question {
+            font-size: 1.1rem;
+            font-weight: 600;
+            margin-bottom: 1rem;
+            color: var(--dark);
+        }
+
+        .quiz-options {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+        }
+
+        .quiz-option {
+            padding: 1rem;
+            background: white;
+            border: 2px solid #e2e8f0;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .quiz-option:hover {
+            border-color: var(--primary);
+            transform: translateX(5px);
+        }
+
+        .quiz-option.correct {
+            background: #d1fae5;
+            border-color: var(--success);
+        }
+
+        .quiz-option.incorrect {
+            background: #fee2e2;
+            border-color: var(--danger);
+        }
+
+        /* Footer */
+        footer {
+            background: var(--dark);
+            color: white;
+            text-align: center;
+            padding: 3rem 0;
+            margin-top: 4rem;
+        }
+
+        .footer-content {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+            align-items: center;
+        }
+
+        .author {
+            font-size: 1.2rem;
+            font-weight: 600;
+            background: linear-gradient(135deg, var(--accent), var(--primary));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .hero h1 {
+                font-size: 2rem;
+            }
+
+            .nav-links {
+                flex-direction: column;
+                gap: 1rem;
+            }
+
+            .card-grid {
+                grid-template-columns: 1fr;
+            }
+
+            section h2 {
+                font-size: 1.5rem;
+            }
+        }
+
+        /* Scroll Progress Bar */
+        .progress-bar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            height: 4px;
+            background: linear-gradient(90deg, var(--primary), var(--accent));
+            z-index: 1001;
+            transition: width 0.2s;
+        }
+
+        /* Button */
+        .btn {
+            display: inline-block;
+            padding: 0.75rem 1.5rem;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            color: white;
+            text-decoration: none;
+            border-radius: 25px;
+            font-weight: 600;
+            transition: transform 0.3s, box-shadow 0.3s;
+            border: none;
+            cursor: pointer;
+            margin: 0.5rem;
+        }
+
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+        }
+
+        /* List Styles */
+        ul.custom-list {
+            list-style: none;
+            padding-left: 0;
+        }
+
+        ul.custom-list li {
+            padding: 0.5rem 0 0.5rem 2rem;
+            position: relative;
+        }
+
+        ul.custom-list li::before {
+            content: '✓';
+            position: absolute;
+            left: 0;
+            color: var(--success);
+            font-weight: bold;
+            font-size: 1.2rem;
+        }
+    </style>
+</head>
+<body>
+    <div class="progress-bar" id="progressBar"></div>
+
+    <header>
+        <nav class="container">
+            <div class="logo">ISTQB® Testing</div>
+            <ul class="nav-links">
+                <li><a href="#inicio">Inicio</a></li>
+                <li><a href="#introduccion">Introducción</a></li>
+                <li><a href="#caja-negra">Caja Negra</a></li>
+                <li><a href="#caja-blanca">Caja Blanca</a></li>
+                <li><a href="#gestion">Gestión</a></li>
+                <li><a href="#evaluacion">Evaluación</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <div class="hero" id="inicio">
+        <div class="container">
+            <h1>ISTQB® Foundation Level</h1>
+            <p>Técnicas de Diseño de Pruebas y Gestión de Pruebas</p>
+            <div class="badge">Calidad de Software - Unidad II</div>
+        </div>
+    </div>
+
+    <main>
+        <section id="introduccion" class="container">
+            <h2>1. Introducción a las Técnicas de Diseño de Pruebas</h2>
+            
+            <p>Según el <strong>ISTQB® Glossary</strong>, una <em>técnica de diseño de pruebas</em> es un procedimiento para derivar y/o seleccionar casos de prueba. El objetivo principal es identificar defectos de forma eficiente mediante la selección sistemática de casos de prueba.</p>
+
+            <div class="card-grid">
+                <div class="card">
+                    <div class="card-icon">🎯</div>
+                    <h3>Objetivo Principal</h3>
+                    <p>Maximizar la detección de defectos con el mínimo número de casos de prueba necesarios.</p>
+                </div>
+                <div class="card">
+                    <div class="card-icon">💰</div>
+                    <h3>Reducción de Costos</h3>
+                    <p>Detectar defectos temprano reduce costos hasta en un 100x comparado con encontrarlos en producción.</p>
+                </div>
+                <div class="card">
+                    <div class="card-icon">📊</div>
+                    <h3>Cobertura Óptima</h3>
+                    <p>Asegurar la cobertura de requisitos críticos sin redundancias innecesarias.</p>
+                </div>
+            </div>
+
+            <div class="highlight">
+                <strong>💡 Dato ISTQB:</strong> Es imposible probar todas las combinaciones. Por ejemplo, un formulario con 10 campos de 10 valores posibles cada uno tendría 10,000,000,000 combinaciones. Las técnicas de diseño nos ayudan a seleccionar un subconjunto efectivo.
+            </div>
+
+            <h3>Principios Fundamentales ISTQB</h3>
+            <ul class="custom-list">
+                <li>El testing muestra la presencia de defectos, no su ausencia</li>
+                <li>El testing exhaustivo es imposible</li>
+                <li>El testing temprano ahorra tiempo y dinero</li>
+                <li>Los defectos se agrupan (clustering)</li>
+                <li>Paradoja del pesticida: las mismas pruebas no encuentran nuevos defectos</li>
+                <li>El testing depende del contexto</li>
+                <li>La ausencia de errores es una falacia</li>
+            </ul>
+        </section>
+
+        <section id="caja-negra" class="container">
+            <h2>2. Técnicas de Caja Negra (Black-Box)</h2>
+            
+            <p>Las técnicas de <strong>caja negra</strong> o <em>técnicas basadas en especificación</em> se centran en las entradas y salidas del sistema sin considerar su estructura interna. Según ISTQB, estas técnicas son aplicables a todos los niveles de prueba.</p>
+
+            <div class="accordion">
+                <div class="accordion-item">
+                    <div class="accordion-header">
+                        <span>Particionamiento de Equivalencia (Equivalence Partitioning)</span>
+                        <span class="accordion-icon">▼</span>
+                    </div>
+                    <div class="accordion-content">
+                        <div class="accordion-content-inner">
+                            <h4>Definición ISTQB</h4>
+                            <p>Técnica de diseño de caja negra en la que los casos de prueba se diseñan para ejecutar representantes de particiones de equivalencia. En principio, los casos de prueba se diseñan para cubrir cada partición al menos una vez.</p>
+                            
+                            <h4>Concepto</h4>
+                            <p>Dividir el dominio de datos de entrada en clases de equivalencia donde se asume que todos los valores dentro de una partición se comportan de forma similar.</p>
+
+                            <div class="example-box">
+                                <h4>📌 Ejemplo Práctico: Campo de Edad</h4>
+                                <p><strong>Requisito:</strong> El sistema acepta edades entre 18 y 65 años.</p>
+                                
+                                <p><strong>Particiones:</strong></p>
+                                <ul>
+                                    <li><strong>EP1 (Inválida):</strong> edad &lt; 18 → Valor representativo: 10</li>
+                                    <li><strong>EP2 (Válida):</strong> 18 ≤ edad ≤ 65 → Valor representativo: 30</li>
+                                    <li><strong>EP3 (Inválida):</strong> edad &gt; 65 → Valor representativo: 70</li>
+                                </ul>
+
+                                <p><strong>Casos de Prueba:</strong></p>
+                                <ul>
+                                    <li>TC-001: Ingresar edad = 10 → Esperado: Rechazo</li>
+                                    <li>TC-002: Ingresar edad = 30 → Esperado: Aceptado</li>
+                                    <li>TC-003: Ingresar edad = 70 → Esperado: Rechazo</li>
+                                </ul>
+                            </div>
+
+                            <div class="success-box">
+                                <strong>✓ Ventaja:</strong> Con solo 3 casos de prueba cubrimos todas las particiones, en lugar de probar cada valor posible (1-100+).
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="accordion-item">
+                    <div class="accordion-header">
+                        <span>Análisis de Valores Límite (Boundary Value Analysis - BVA)</span>
+                        <span class="accordion-icon">▼</span>
+                    </div>
+                    <div class="accordion-content">
+                        <div class="accordion-content-inner">
+                            <h4>Definición ISTQB</h4>
+                            <p>Técnica de diseño de caja negra basada en el ejercicio de valores límite de una partición de equivalencia.</p>
+                            
+                            <h4>Fundamento</h4>
+                            <p>Los defectos tienden a concentrarse en los <strong>bordes o límites</strong> de los rangos de entrada. Según estudios, aproximadamente el 16% de todos los defectos ocurren en valores límite.</p>
+
+                            <h4>Regla de los 3 Puntos</h4>
+                            <p>Para cada límite, probar:</p>
+                            <ul>
+                                <li>Valor inmediatamente inferior al límite (límite - 1)</li>
+                                <li>Valor en el límite exacto</li>
+                                <li>Valor inmediatamente superior al límite (límite + 1)</li>
+                            </ul>
+
+                            <div class="example-box">
+                                <h4>📌 Ejemplo: Longitud de Contraseña</h4>
+                                <p><strong>Requisito:</strong> Contraseña entre 8 y 16 caracteres.</p>
+                                
+                                <p><strong>Valores a probar:</strong></p>
+                                <div class="table-container">
+                                    <table>
+                                        <tr>
+                                            <th>Longitud</th>
+                                            <th>Categoría</th>
+                                            <th>Resultado Esperado</th>
+                                        </tr>
+                                        <tr>
+                                            <td>7 caracteres</td>
+                                            <td>Por debajo del mínimo</td>
+                                            <td>❌ Inválido</td>
+                                        </tr>
+                                        <tr>
+                                            <td>8 caracteres</td>
+                                            <td>Límite inferior</td>
+                                            <td>✓ Válido</td>
+                                        </tr>
+                                        <tr>
+                                            <td>9 caracteres</td>
+                                            <td>Por encima del mínimo</td>
+                                            <td>✓ Válido</td>
+                                        </tr>
+                                        <tr>
+                                            <td>15 caracteres</td>
+                                            <td>Por debajo del máximo</td>
+                                            <td>✓ Válido</td>
+                                        </tr>
+                                        <tr>
+                                            <td>16 caracteres</td>
+                                            <td>Límite superior</td>
+                                            <td>✓ Válido</td>
+                                        </tr>
+                                        <tr>
+                                            <td>17 caracteres</td>
+                                            <td>Por encima del máximo</td>
+                                            <td>❌ Inválido</td>
+                                        </tr>
+                                    </table>
+                                </div>
+                            </div>
+
+                            <div class="highlight">
+                                <strong>⚠️ Nota ISTQB:</strong> BVA es complementario a Particionamiento de Equivalencia. BVA se enfoca en los límites, mientras que EP selecciona valores representativos dentro de particiones.
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="accordion-item">
+                    <div class="accordion-header">
+                        <span>Tablas de Decisión (Decision Tables)</span>
+                        <span class="accordion-icon">▼</span>
+                    </div>
+                    <div class="accordion-content">
+                        <div class="accordion-content-inner">
+                            <h4>Definición ISTQB</h4>
+                            <p>Técnica de diseño de caja negra en la que los casos de prueba se diseñan para ejecutar las combinaciones de condiciones mostradas en una tabla de decisión.</p>
+                            
+                            <h4>¿Cuándo Usar?</h4>
+                            <ul class="custom-list">
+                                <li>Sistemas con múltiples condiciones que afectan diferentes acciones</li>
+                                <li>Lógica de negocio compleja con reglas interdependientes</li>
+                                <li>Cuando se necesita verificar todas las combinaciones de condiciones</li>
+                            </ul>
+
+                            <div class="example-box">
+                                <h4>📌 Ejemplo: Sistema de Descuentos</h4>
+                                <p><strong>Reglas de Negocio:</strong></p>
+                                <ul>
+                                    <li>Cliente VIP + Compra &gt; $100 → Descuento 20%</li>
+                                    <li>Cliente VIP + Compra ≤ $100 → Descuento 10%</li>
+                                    <li>Cliente Regular + Compra &gt; $100 → Descuento 5%</li>
+                                    <li>Cliente Regular + Compra ≤ $100 → Sin descuento</li>
+                                </ul>
+
+                                <div class="table-container">
+                                    <table>
+                                        <tr>
+                                            <th>Condiciones</th>
+                                            <th>Regla 1</th>
+                                            <th>Regla 2</th>
+                                            <th>Regla 3</th>
+                                            <th>Regla 4</th>
+                                        </tr>
+                                        <tr>
+                                            <td>¿Es Cliente VIP?</td>
+                                            <td>Sí</td>
+                                            <td>Sí</td>
+                                            <td>No</td>
+                                            <td>No</td>
+                                        </tr>
+                                        <tr>
+                                            <td>¿Compra &gt; $100?</td>
+                                            <td>Sí</td>
+                                            <td>No</td>
+                                            <td>Sí</td>
+                                            <td>No</td>
+                                        </tr>
+                                        <tr style="background: #fef3c7;">
+                                            <td><strong>ACCIÓN</strong></td>
+                                            <td>20% desc.</td>
+                                            <td>10% desc.</td>
+                                            <td>5% desc.</td>
+                                            <td>0% desc.</td>
+                                        </tr>
+                                    </table>
+                                </div>
+
+                                <p><strong>Casos de Prueba:</strong></p>
+                                <ul>
+                                    <li>TC-004: VIP=Sí, Monto=$150 → Esperado: 20% descuento</li>
+                                    <li>TC-005: VIP=Sí, Monto=$80 → Esperado: 10% descuento</li>
+                                    <li>TC-006: VIP=No, Monto=$200 → Esperado: 5% descuento</li>
+                                    <li>TC-007: VIP=No, Monto=$50 → Esperado: Sin descuento</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="accordion-item">
+                    <div class="accordion-header">
+                        <span>Pruebas de Transición de Estado (State Transition Testing)</span>
+                        <span class="accordion-icon">▼</span>
+                    </div>
+                    <div class="accordion-content">
+                        <div class="accordion-content-inner">
+                            <h4>Definición ISTQB</h4>
+                            <p>Técnica de diseño de caja negra en la que los casos de prueba se diseñan para ejecutar transiciones de estado válidas e inválidas.</p>
+                            
+                            <h4>Componentes</h4>
+                            <ul class="custom-list">
+                                <li><strong>Estados:</strong> Condiciones o situaciones durante la vida de un objeto</li>
+                                <li><strong>Transiciones:</strong> Movimiento de un estado a otro</li>
+                                <li><strong>Eventos:</strong> Acciones que causan transiciones</li>
+                                <li><strong>Acciones:</strong> Resultados de una transición</li>
+                            </ul>
+
+                            <div class="example-box">
+                                <h4>📌 Ejemplo: Sistema de Login</h4>
+                                
+                                <p><strong>Estados:</strong></p>
+                                <ul>
+                                    <li><strong>S1:</strong> Inicio (No autenticado)</li>
+                                    <li><strong>S2:</strong> Autenticado</li>
+                                    <li><strong>S3:</strong> Bloqueado (después de 3 intentos fallidos)</li>
+                                </ul>
+
+                                <p><strong>Transiciones Válidas:</strong></p>
+                                <ul>
+                                    <li>S1 → S2: Login exitoso con credenciales correctas</li>
+                                    <li>S1 → S1: Login fallido (1er o 2do intento)</li>
+                                    <li>S1 → S3: Login fallido (3er intento)</li>
+                                    <li>S2 → S1: Logout</li>
+                                    <li>S3 → S1: Desbloqueo por administrador</li>
+                                </ul>
+
+                                <p><strong>Casos de Prueba (Cobertura de Estados):</strong></p>
+                                <ul>
+                                    <li>TC-008: Login exitoso → Verificar estado S2</li>
+                                    <li>TC-009: 3 intentos fallidos → Verificar estado S3</li>
+                                    <li>TC-010: Logout desde S2 → Verificar retorno a S1</li>
+                                </ul>
+
+                                <p><strong>Casos de Prueba (Transiciones Inválidas):</strong></p>
+                                <ul>
+                                    <li>TC-011: Intentar logout desde S1 → Verificar rechazo</li>
+                                    <li>TC-012: Intentar acciones de usuario desde S3 → Verificar bloqueo</li>
+                                </ul>
+                            </div>
+
+                            <div class="success-box">
+                                <strong>✓ Cobertura:</strong> Para 100% cobertura de transiciones, cada flecha en el diagrama debe probarse al menos una vez.
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="caja-blanca" class="container">
+            <h2>3. Técnicas de Caja Blanca (White-Box)</h2>
+            
+            <p>Las técnicas de <strong>caja blanca</strong> o <em>técnicas basadas en estructura</em> se basan en la estructura interna del código. Según ISTQB, estas técnicas son aplicables principalmente en niveles de componente e integración.</p>
+
+            <div class="accordion">
+                <div class="accordion-item">
+                    <div class="accordion-header">
+                        <span>Cobertura de Sentencias (Statement Coverage)</span>
+                        <span class="accordion-icon">▼</span>
+                    </div>
+                    <div class="accordion-content">
+                        <div class="accordion-content-inner">
+                            <h4>Definición ISTQB</h4>
+                            <p>Porcentaje de sentencias ejecutables que han sido ejercitadas por un conjunto de pruebas.</p>
+                            
+                            <p><strong>Fórmula:</strong></p>
+                            <div class="code-block">
+Cobertura de Sentencias = (Sentencias Ejecutadas / Total Sentencias) × 100%
+                            </div>
+
+                            <div class="example-box">
+                                <h4>📌 Ejemplo de Código</h4>
+                                <div class="code-block">
+función calcularPrecio(cantidad, precioUnitario):
+    total = cantidad × precioUnitario  // Línea 1
+    
+    si (total > 1000):                  // Línea 2
+        descuento = total × 0.10        // Línea 3
+        total = total - descuento       // Línea 4
+    
+    retornar total                      // Línea 5
+                                </div>
+
+                                <p><strong>Caso de Prueba para 100% Cobertura:</strong></p>
+                                <ul>
+                                    <li>TC-013: cantidad=50, precioUnitario=25 → total=1250 → Ejecuta TODAS las líneas (1,2,3,4,5)</li>
+                                </ul>
+
+                                <p><strong>Total de sentencias ejecutables:</strong> 5</p>
+                                <p><strong>Sentencias ejecutadas:</strong> 5</p>
+                                <p><strong>Cobertura:</strong> (5/5) × 100% = <strong>100%</strong></p>
+                            </div>
+
+                            <div class="highlight">
+                                <strong>⚠️ Limitación:</strong> 100% cobertura de sentencias NO garantiza que se probaron todas las condiciones. Es el criterio más débil de caja blanca.
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="accordion-item">
+                    <div class="accordion-header">
+                        <span>Cobertura de Decisiones (Decision Coverage)</span>
+                        <span class="accordion-icon">▼</span>
+                    </div>
+                    <div class="accordion-content">
+                        <div class="accordion-content-inner">
+                            <h4>Definición ISTQB</h4>
+                            <p>Porcentaje de resultados de decisión (verdadero/falso) que han sido ejercitados por un conjunto de pruebas. También llamada Cobertura de Ramas (Branch Coverage).</p>
+                            
+                            <p><strong>Fórmula:</strong></p>
+                            <div class="code-block">
+Cobertura de Decisiones = (Ramas Ejecutadas / Total Ramas) × 100%
+                            </div>
+
+                            <div class="example-box">
+                                <h4>📌 Mismo Ejemplo</h4>
+                                <div class="code-block">
+función calcularPrecio(cantidad, precioUnitario):
+    total = cantidad × precioUnitario
+    
+    si (total > 1000):           // Decisión con 2 ramas
+        descuento = total × 0.10  // Rama TRUE
+        total = total - descuento
+    // (continuar sin descuento)   // Rama FALSE implícita
+    
+    retornar total
+                                </div>
+
+                                <p><strong>Para 100% Cobertura de Decisiones necesitamos 2 casos:</strong></p>
+                                <ul>
+                                    <li><strong>TC-014:</strong> cantidad=50, precioUnitario=25 → total=1250 → Rama TRUE ejecutada</li>
+                                    <li><strong>TC-015:</strong> cantidad=10, precioUnitario=15 → total=150 → Rama FALSE ejecutada</li>
+                                </ul>
+
+                                <p><strong>Cobertura:</strong> (2/2) × 100% = <strong>100%</strong></p>
+                            </div>
+
+                            <div class="success-box">
+                                <strong>✓ Ventaja:</strong> 100% cobertura de decisiones IMPLICA 100% cobertura de sentencias, pero no al revés.
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="accordion-item">
+                    <div class="accordion-header">
+                        <span>Cobertura de Condiciones y Caminos</span>
+                        <span class="accordion-icon">▼</span>
+                    </div>
+                    <div class="accordion-content">
+                        <div class="accordion-content-inner">
+                            <h4>Cobertura de Condiciones (Condition Coverage)</h4>
+                            <p>Porcentaje de resultados individuales de condiciones booleanas que han sido evaluadas como verdaderas y falsas.</p>
+
+                            <div class="example-box">
+                                <h4>📌 Ejemplo con Condición Compuesta</h4>
+                                <div class="code-block">
+si (edad >= 18 AND tienePermiso == true):
+    permitirAcceso()
+                                </div>
+
+                                <p><strong>Condiciones a probar:</strong></p>
+                                <ul>
+                                    <li>edad >= 18 → TRUE y FALSE</li>
+                                    <li>tienePermiso == true → TRUE y FALSE</li>
+                                </ul>
+
+                                <p><strong>Casos para Cobertura de Condiciones:</strong></p>
+                                <div class="table-container">
+                                    <table>
+                                        <tr>
+                                            <th>Caso</th>
+                                            <th>edad >= 18</th>
+                                            <th>tienePermiso</th>
+                                            <th>Resultado AND</th>
+                                        </tr>
+                                        <tr>
+                                            <td>TC-016</td>
+                                            <td>TRUE (25)</td>
+                                            <td>TRUE</td>
+                                            <td>TRUE → Acceso</td>
+                                        </tr>
+                                        <tr>
+                                            <td>TC-017</td>
+                                            <td>FALSE (15)</td>
+                                            <td>FALSE</td>
+                                            <td>FALSE → Sin acceso</td>
+                                        </tr>
+                                    </table>
+                                </div>
+                            </div>
+
+                            <h4>Cobertura de Caminos (Path Coverage)</h4>
+                            <p>Probar todos los caminos posibles a través del código. Es el criterio más fuerte pero a menudo impracticable.</p>
+
+                            <div class="highlight">
+                                <strong>⚠️ Nota:</strong> Para un programa con n decisiones independientes, hay 2^n caminos posibles. Por ejemplo, 10 decisiones = 1,024 caminos.
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="experiencia" class="container">
+            <h2>4. Técnicas Basadas en la Experiencia</h2>
+            
+            <p>Según ISTQB, estas técnicas aprovechan el conocimiento, experiencia e intuición de testers y partes interesadas.</p>
+
+            <div class="card-grid">
+                <div class="card">
+                    <div class="card-icon">🔍</div>
+                    <h3>Error Guessing (Adivinación de Errores)</h3>
+                    <p>Técnica donde el tester usa su experiencia para anticipar defectos que podrían ocurrir.</p>
+                    <p><strong>Ejemplos comunes:</strong></p>
+                    <ul>
+                        <li>Campos vacíos o NULL</li>
+                        <li>División por cero</li>
+                        <li>Caracteres especiales (ñ, @, #)</li>
+                        <li>Fechas inválidas (31 de febrero)</li>
+                        <li>Desbordamiento de buffer</li>
+                    </ul>
+                </div>
+
+                <div class="card">
+                    <div class="card-icon">🗺️</div>
+                    <h3>Exploratory Testing (Pruebas Exploratorias)</h3>
+                    <p>Enfoque donde el diseño, ejecución y evaluación de pruebas se realizan simultáneamente.</p>
+                    <p><strong>Características:</strong></p>
+                    <ul>
+                        <li>Aprendizaje continuo</li>
+                        <li>Diseño de pruebas en tiempo real</li>
+                        <li>Documentación concurrente</li>
+                        <li>Sesiones con tiempo definido</li>
+                    </ul>
+                </div>
+
+                <div class="card">
+                    <div class="card-icon">✅</div>
+                    <h3>Checklist-Based Testing</h3>
+                    <p>Usar listas de verificación basadas en experiencia previa para guiar las pruebas.</p>
+                    <p><strong>Ejemplo de Checklist Web:</strong></p>
+                    <ul>
+                        <li>☑ Validación de formularios</li>
+                        <li>☑ Navegación entre páginas</li>
+                        <li>☑ Compatibilidad de navegadores</li>
+                        <li>☑ Tiempos de carga</li>
+                    </ul>
+                </div>
+            </div>
+        </section>
+
+        <section id="gestion" class="container">
+            <h2>5. Gestión de Pruebas según ISTQB</h2>
+            
+            <h3>5.1 Plan de Pruebas (Test Plan)</h3>
+            <p>Según ISTQB, el plan de pruebas es un documento que describe el alcance, enfoque, recursos y cronograma de las actividades de prueba.</p>
+
+            <div class="example-box">
+                <h4>📋 Contenido del Plan de Pruebas (IEEE 829)</h4>
+                <ul class="custom-list">
+                    <li><strong>Identificador del Plan:</strong> Nombre único y versión</li>
+                    <li><strong>Introducción:</strong> Contexto y referencias</li>
+                    <li><strong>Elementos de Prueba:</strong> Qué se va a probar</li>
+                    <li><strong>Características a Probar:</strong> Funcionalidades específicas</li>
+                    <li><strong>Características que NO se Probarán:</strong> Exclusiones explícitas</li>
+                    <li><strong>Enfoque:</strong> Estrategia y técnicas a usar</li>
+                    <li><strong>Criterios de Paso/Fallo:</strong> Umbrales de aceptación</li>
+                    <li><strong>Criterios de Suspensión y Reanudación:</strong> Cuándo detener y continuar</li>
+                    <li><strong>Entregables:</strong> Documentos y artefactos</li>
+                    <li><strong>Tareas de Prueba:</strong> Actividades específicas</li>
+                    <li><strong>Necesidades de Ambiente:</strong> Hardware, software, red</li>
+                    <li><strong>Responsabilidades:</strong> Roles y asignaciones</li>
+                    <li><strong>Capacitación:</strong> Necesidades de formación</li>
+                    <li><strong>Cronograma:</strong> Fechas y dependencias</li>
+                    <li><strong>Riesgos:</strong> Identificación y mitigación</li>
+                    <li><strong>Aprobaciones:</strong> Firmas requeridas</li>
+                </ul>
+            </div>
+
+            <h3>5.2 Caso de Prueba (Test Case)</h3>
+            <p>Conjunto de valores de entrada, precondiciones de ejecución, resultados esperados y postcondiciones, desarrollado para un objetivo particular.</p>
+
+            <div class="code-block">
+ID: TC-BANK-042
+Título: Transferencia bancaria exitosa con saldo suficiente
+Prioridad: Alta
+Precondiciones: 
+  - Usuario autenticado
+  - Cuenta origen con saldo >= $500
+  - Cuenta destino válida y activa
+Datos de Prueba:
+  - Cuenta Origen: 1234567890 (Saldo: $1,000)
+  - Cuenta Destino: 0987654321
+  - Monto: $500
+Pasos:
+  1. Navegar a "Transferencias"
+  2. Seleccionar cuenta origen: 1234567890
+  3. Ingresar cuenta destino: 0987654321
+  4. Ingresar monto: $500
+  5. Clic en "Transferir"
+  6. Confirmar operación
+Resultado Esperado:
+  - Mensaje: "Transferencia exitosa"
+  - Saldo cuenta origen: $500
+  - Saldo cuenta destino: +$500
+  - Comprobante generado
+Postcondiciones:
+  - Transacción registrada en historial
+  - Email de confirmación enviado
+            </div>
+
+            <h3>5.3 Gestión de Defectos</h3>
+            
+            <div class="table-container">
+                <table>
+                    <tr>
+                        <th>Severidad</th>
+                        <th>Definición ISTQB</th>
+                        <th>Ejemplo</th>
+                    </tr>
+                    <tr>
+                        <td>Crítica</td>
+                        <td>Sistema inoperante, pérdida de datos</td>
+                        <td>Aplicación bancaria no permite login</td>
+                    </tr>
+                    <tr>
+                        <td>Alta</td>
+                        <td>Funcionalidad principal no funciona</td>
+                        <td>Carrito de compras no calcula total</td>
+                    </tr>
+                    <tr>
+                        <td>Media</td>
+                        <td>Funcionalidad secundaria afectada</td>
+                        <td>Filtros de búsqueda no funcionan correctamente</td>
+                    </tr>
+                    <tr>
+                        <td>Baja</td>
+                        <td>Defecto cosmético o menor</td>
+                        <td>Texto desalineado en página</td>
+                    </tr>
+                </table>
+            </div>
+
+            <h3>5.4 Métricas de Pruebas</h3>
+
+            <div class="card-grid">
+                <div class="card">
+                    <h3>Cobertura de Requisitos</h3>
+                    <div class="code-block">
+Cobertura = (Requisitos Probados / Total Requisitos) × 100%
+
+Ejemplo: (48 / 50) × 100% = 96%
+                    </div>
+                </div>
+
+                <div class="card">
+                    <h3>Densidad de Defectos</h3>
+                    <div class="code-block">
+Densidad = Total Defectos / KLOC
+
+Ejemplo: 45 defectos / 5 KLOC = 9 defectos/KLOC
+                    </div>
+                    <p><small>KLOC = Mil líneas de código</small></p>
+                </div>
+
+                <div class="card">
+                    <h3>Efectividad del Testing</h3>
+                    <div class="code-block">
+Efectividad = Defectos Pre-Release / (Defectos Pre + Post) × 100%
+
+Ejemplo: 90 / (90 + 10) × 100% = 90%
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="evaluacion" class="container">
+            <h2>6. Evaluación de Conocimientos</h2>
+            
+            <div class="quiz">
+                <div class="quiz-question">1. ¿Cuál es la diferencia fundamental entre técnicas de caja negra y caja blanca?</div>
+                <div class="quiz-options">
+                    <div class="quiz-option" onclick="checkAnswer(this, false)">
+                        Las de caja negra son más efectivas que las de caja blanca
+                    </div>
+                    <div class="quiz-option" onclick="checkAnswer(this, true)">
+                        Las de caja negra se basan en especificaciones, las de caja blanca en la estructura del código
+                    </div>
+                    <div class="quiz-option" onclick="checkAnswer(this, false)">
+                        Las de caja negra solo se usan en testing manual
+                    </div>
+                    <div class="quiz-option" onclick="checkAnswer(this, false)">
+                        No hay diferencia, son sinónimos
+                    </div>
+                </div>
+            </div>
+
+            <div class="quiz">
+                <div class="quiz-question">2. Para un rango válido de [10, 50], ¿cuántos valores debes probar usando Análisis de Valores Límite?</div>
+                <div class="quiz-options">
+                    <div class="quiz-option" onclick="checkAnswer(this, false)">
+                        2 valores (10 y 50)
+                    </div>
+                    <div class="quiz-option" onclick="checkAnswer(this, false)">
+                        3 valores (10, 30, 50)
+                    </div>
+                    <div class="quiz-option" onclick="checkAnswer(this, true)">
+                        6 valores (9, 10, 11, 49, 50, 51)
+                    </div>
+                    <div class="quiz-option" onclick="checkAnswer(this, false)">
+                        Todos los valores entre 10 y 50
+                    </div>
+                </div>
+            </div>
+
+            <div class="quiz">
+                <div class="quiz-question">3. ¿Cuál técnica es más apropiada para probar un sistema con múltiples reglas de descuento interdependientes?</div>
+                <div class="quiz-options">
+                    <div class="quiz-option" onclick="checkAnswer(this, false)">
+                        Particionamiento de Equivalencia
+                    </div>
+                    <div class="quiz-option" onclick="checkAnswer(this, false)">
+                        Análisis de Valores Límite
+                    </div>
+                    <div class="quiz-option" onclick="checkAnswer(this, true)">
+                        Tablas de Decisión
+                    </div>
+                    <div class="quiz-option" onclick="checkAnswer(this, false)">
+                        Cobertura de Sentencias
+                    </div>
+                </div>
+            </div>
+
+            <div class="quiz">
+                <div class="quiz-question">4. Según ISTQB, ¿cuál de los siguientes principios es correcto?</div>
+                <div class="quiz-options">
+                    <div class="quiz-option" onclick="checkAnswer(this, false)">
+                        El testing puede demostrar la ausencia de defectos
+                    </div>
+                    <div class="quiz-option" onclick="checkAnswer(this, true)">
+                        El testing exhaustivo es imposible
+                    </div>
+                    <div class="quiz-option" onclick="checkAnswer(this, false)">
+                        Las mismas pruebas siempre encuentran nuevos defectos
+                    </div>
+                    <div class="quiz-option" onclick="checkAnswer(this, false)">
+                        El testing no depende del contexto
+                    </div>
+                </div>
+            </div>
+
+            <h3>Ejercicio Práctico</h3>
+            <div class="example-box">
+                <h4>🎯 Diseña Casos de Prueba</h4>
+                <p><strong>Requisito:</strong> Un sistema de reservas de vuelos acepta número de pasajeros entre 1 y 9.</p>
+                
+                <p><strong>Tareas:</strong></p>
+                <ol>
+                    <li>Aplicar Particionamiento de Equivalencia (identifica al menos 3 particiones)</li>
+                    <li>Aplicar Análisis de Valores Límite (lista los 6 valores a probar)</li>
+                    <li>Aplicar Error Guessing (menciona 3 casos especiales que probarías)</li>
+                </ol>
+
+                <button class="btn" onclick="toggleSolution()">Ver Solución Propuesta</button>
+
+                <div id="solution" style="display:none; margin-top: 1rem;">
+                    <h4>Solución:</h4>
+                    
+                    <p><strong>1. Particionamiento de Equivalencia:</strong></p>
+                    <ul>
+                        <li>EP1 (Inválida): pasajeros &lt; 1 → Valor: 0 o -1</li>
+                        <li>EP2 (Válida): 1 ≤ pasajeros ≤ 9 → Valor: 5</li>
+                        <li>EP3 (Inválida): pasajeros &gt; 9 → Valor: 10 o 15</li>
+                    </ul>
+
+                    <p><strong>2. Valores Límite:</strong></p>
+                    <ul>
+                        <li>0 (debajo del mínimo) - Inválido</li>
+                        <li>1 (límite inferior) - Válido</li>
+                        <li>2 (encima del mínimo) - Válido</li>
+                        <li>8 (debajo del máximo) - Válido</li>
+                        <li>9 (límite superior) - Válido</li>
+                        <li>10 (encima del máximo) - Inválido</li>
+                    </ul>
+
+                    <p><strong>3. Error Guessing:</strong></p>
+                    <ul>
+                        <li>Valores no numéricos: "abc", "dos", caracteres especiales</li>
+                        <li>Valores decimales: 2.5, 3.7</li>
+                        <li>Campo vacío o NULL</li>
+                        <li>Números muy grandes: 999999</li>
+                        <li>Números negativos: -5</li>
+                    </ul>
+                </div>
+            </div>
+        </section>
+
+        <section class="container">
+            <h2>7. Recursos y Referencias ISTQB</h2>
+            
+            <div class="card-grid">
+                <div class="card">
+                    <h3>📚 Documentación Oficial</h3>
+                    <ul>
+                        <li>ISTQB® Certified Tester Foundation Level Syllabus v4.0</li>
+                        <li>ISTQB® Glossary</li>
+                        <li>ISO/IEC/IEEE 29119 (Software Testing Standard)</li>
+                    </ul>
+                </div>
+
+                <div class="card">
+                    <h3>🛠️ Herramientas</h3>
+                    <ul>
+                        <li><strong>Gestión:</strong> JIRA, TestRail, Zephyr, qTest</li>
+                        <li><strong>Automatización:</strong> Selenium, Cypress, Playwright</li>
+                        <li><strong>Performance:</strong> JMeter, LoadRunner, Gatling</li>
+                        <li><strong>API:</strong> Postman, REST Assured, SoapUI</li>
+                    </ul>
+                </div>
+
+                <div class="card">
+                    <h3>📖 Bibliografía Recomendada</h3>
+                    <ul>
+                        <li>"Software Testing Foundations" - Rex Black</li>
+                        <li>"Foundations of Software Testing" - Dorothy Graham</li>
+                        <li>"Lessons Learned in Software Testing" - Kaner, Bach & Pettichord</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="success-box" style="margin-top: 2rem;">
+                <h3>✅ Resumen de Puntos Clave</h3>
+                <ul class="custom-list">
+                    <li>Las técnicas de diseño maximizan la detección de defectos con mínimo esfuerzo</li>
+                    <li>Caja Negra se basa en especificaciones, Caja Blanca en estructura de código</li>
+                    <li>Particionamiento y Valores Límite son técnicas fundamentales de caja negra</li>
+                    <li>Tablas de Decisión son ideales para lógica compleja con múltiples condiciones</li>
+                    <li>Transición de Estado modela comportamientos dinámicos del sistema</li>
+                    <li>Cobertura de Decisiones es más fuerte que Cobertura de Sentencias</li>
+                    <li>Técnicas basadas en experiencia complementan las técnicas formales</li>
+                    <li>La gestión efectiva de pruebas requiere planificación, métricas y seguimiento</li>
+                </ul>
+            </div>
+        </section>
+    </main>
+
+    <footer>
+        <div class="container footer-content">
+            <p>&copy; 2025 ISTQB® Foundation Level - Técnicas de Diseño y Gestión de Pruebas</p>
+            <p class="author">Diseñada por Johan Tapia PhD</p>
+            <p style="font-size: 0.9rem; opacity: 0.8; margin-top: 1rem;">
+                Material educativo para Calidad de Software | Basado en ISTQB® Syllabus
+            </p>
+        </div>
+    </footer>
+
+    <script>
+        // Progress Bar
+        window.addEventListener('scroll', () => {
+            const windowHeight = window.innerHeight;
+            const documentHeight = document.documentElement.scrollHeight;
+            const scrollTop = window.pageYOffset || document.documentElement.scrollTop;
+            const scrollPercent = (scrollTop / (documentHeight - windowHeight)) * 100;
+            document.getElementById('progressBar').style.width = scrollPercent + '%';
+        });
+
+        // Smooth Scroll
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({
+                        behavior: 'smooth',
+                        block: 'start'
+                    });
+                }
+            });
+        });
+
+        // Accordion
+        document.querySelectorAll('.accordion-item').forEach(item => {
+            const header = item.querySelector('.accordion-header');
+            const content = item.querySelector('.accordion-content');
+            
+            header.addEventListener('click', () => {
+                const isActive = item.classList.contains('active');
+                
+                // Close all accordions
+                document.querySelectorAll('.accordion-item').forEach(i => {
+                    i.classList.remove('active');
+                    i.querySelector('.accordion-content').style.maxHeight = null;
+                });
+                
+                // Open clicked accordion if it wasn't active
+                if (!isActive) {
+                    item.classList.add('active');
+                    content.style.maxHeight = content.scrollHeight + 'px';
+                }
+            });
+        });
+
+        // Quiz functionality
+        function checkAnswer(element, isCorrect) {
+            // Remove previous selections in this quiz
+            const options = element.parentElement.querySelectorAll('.quiz-option');
+            options.forEach(opt => {
+                opt.classList.remove('correct', 'incorrect');
+            });
+            
+            // Mark selected answer
+            if (isCorrect) {
+                element.classList.add('correct');
+                setTimeout(() => {
+                    alert('¡Correcto! ✓');
+                }, 100);
+            } else {
+                element.classList.add('incorrect');
+                setTimeout(() => {
+                    alert('Incorrecto. Revisa el contenido e intenta nuevamente.');
+                }, 100);
+            }
+        }
+
+        // Toggle solution
+        function toggleSolution() {
+            const solution = document.getElementById('solution');
+            if (solution.style.display === 'none') {
+                solution.style.display = 'block';
+            } else {
+                solution.style.display = 'none';
+            }
+        }
+
+        // Animate cards on scroll
+        const observerOptions = {
+            threshold: 0.1,
+            rootMargin: '0px 0px -50px 0px'
+        };
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.style.opacity = '1';
+                    entry.target.style.transform = 'translateY(0)';
+                }
+            });
+        }, observerOptions);
+
+        document.querySelectorAll('.card, .accordion-item').forEach(el => {
+            el.style.opacity = '0';
+            el.style.transform = 'translateY(20px)';
+            el.style.transition = 'opacity 0.6s ease, transform 0.6s ease';
+            observer.observe(el);
+        });
+
+        // Mobile menu toggle (if needed)
+        const createMobileMenu = () => {
+            if (window.innerWidth <= 768) {
+                const nav = document.querySelector('.nav-links');
+                if (nav && !document.querySelector('.menu-toggle')) {
+                    const toggle = document.createElement('button');
+                    toggle.className = 'menu-toggle';
+                    toggle.innerHTML = '☰';
+                    toggle.style.cssText = 'background:none;border:none;font-size:2rem;cursor:pointer;';
+                    
+                    toggle.addEventListener('click', () => {
+                        nav.style.display = nav.style.display === 'flex' ? 'none' : 'flex';
+                    });
+                    
+                    document.querySelector('nav').appendChild(toggle);
+                }
+            }
+        };
+
+        window.addEventListener('resize', createMobileMenu);
+        createMobileMenu();
+    </script>
+</body>
+</html>
